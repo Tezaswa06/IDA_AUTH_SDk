@@ -1,4 +1,4 @@
-package auth.sdk.models;
+package auth.sdk.java.models;
 
 import auth.sdk.java.models.BiometricModelDataDigitalIdField;
 import lombok.Getter;

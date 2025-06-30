@@ -177,9 +177,16 @@ public class CryptoUtil {
     private byte[] asymmetricDecrypt(byte[] encryptedData) throws Exception {
         logger.debug("Asymmetric Decryption");
         Cipher cipher = Cipher.getInstance(RSA_ALGO);
-        cipher.init(Cipher.DECRYPT_MODE, decryptPrivateKey);
+        OAEPParameterSpec oaepParams = new OAEPParameterSpec(
+                HASH_ALGO,
+                MGF1,
+                MGF1ParameterSpec.SHA256,
+                PSource.PSpecified.DEFAULT
+        );
+        cipher.init(Cipher.DECRYPT_MODE, decryptPrivateKey, oaepParams);
         return cipher.doFinal(encryptedData);
     }
+
 
     private static byte[] symmetricEncrypt(byte[] data, byte[] key, byte[] aad) throws Exception {
         SecretKeySpec spec = new SecretKeySpec(key, "AES");
@@ -201,21 +208,22 @@ public class CryptoUtil {
     }
 
     private static byte[] symmetricDecrypt(byte[] encryptedData, byte[] key, byte[] aad) throws Exception {
-
         SecretKeySpec spec = new SecretKeySpec(key, "AES");
         Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
 
-        // Extract IV from the encrypted data
-        byte[] iv = new byte[16]; // GCM standard IV size
+        byte[] iv = new byte[16];
         System.arraycopy(encryptedData, encryptedData.length - iv.length, iv, 0, iv.length);
 
         GCMParameterSpec gcmParameterSpec = new GCMParameterSpec(128, iv);
-        System.out.println("Decryption IV: " + java.util.Base64.getEncoder().encodeToString(iv));// 128-bit tag length
         cipher.init(Cipher.DECRYPT_MODE, spec, gcmParameterSpec);
 
-        byte[] output = cipher.doFinal(encryptedData, 0, encryptedData.length - iv.length);
-        return output; // Return the decrypted data
+        if (aad != null) {
+            cipher.updateAAD(aad);
+        }
+
+        return cipher.doFinal(encryptedData, 0, encryptedData.length - iv.length);
     }
+
 
     public Map<String, Object> decryptAuthData(String sessionKeyB64, String encryptedIdentityB64) throws Exception {
         try {

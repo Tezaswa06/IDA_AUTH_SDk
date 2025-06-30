@@ -1,13 +1,13 @@
 {
-  "individual_id": "8536475201",
+  "individual_id": "2139125329",
   "individual_id_type": "UIN",
   "email": true,
   "phone": true,
   "language": "eng",
 
   "name": "TEST_FULLNAMEeng",
-  "gender": "MLEeng",
+  "gender": "MLE",
   "dob": "1992/04/15",
-  "email_id": "ESignet_AddIdentity_BioAuth_smoke_Pos@mosip.net"
+  "email_id": "IdRepository_AddIdentity_UpdateCount_Vid_smoke_Pos@mosip.net"
 
 }

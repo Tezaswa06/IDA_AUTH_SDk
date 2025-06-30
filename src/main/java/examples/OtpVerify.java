@@ -25,22 +25,20 @@ import java.util.Optional;
 public class OtpVerify {
     public static void main(String[] args) {
         try {
-            // Load configuration
+
             ConfigLoader configLoader = new ConfigLoader();
             Authenticator authenticator = new Authenticator(configLoader.loadConfig(), null);
 
-            // Perform KYC authentication with optional parameters
-            Map<String, Object> response = authenticator.kyc(
-                    "1234567890",         // txnId
-                    "2139125329",         // individualId
-                    "UIN",                // individualIdType
-                    Optional.empty(),     // demographicData (optional)
-                    "111111".describeConstable(),     // otpValue (optional)
-                    Optional.empty(),     // biometrics (optional)
-                    true                  // consent
+            Map<String, Object> response = authenticator.auth(
+                    "2139125329", // individualId
+                    "UIN",             // individualIdType
+                    null , // demographicData
+                    Optional.of("1234567890"),   // txnId
+                    Optional.of("111111"),   // otpValue
+                    Optional.empty(),   // biometrics
+                    true                // consentObtained
             );
 
-            // Convert response to JsonNode for easier processing
             ObjectMapper mapper = new ObjectMapper();
             JsonNode responseNode = mapper.convertValue(response, JsonNode.class);
 
@@ -54,10 +52,10 @@ public class OtpVerify {
                 System.exit(1);
             }
 
-            // Print response status
+
             System.out.println("Response status: 200");
 
-            // Decrypt and print the response
+
             Map<String, Object> decryptedResponse = authenticator.decryptResponse(response);
             System.out.println("Decrypted response: " + mapper.writeValueAsString(decryptedResponse));
 

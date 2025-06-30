@@ -152,12 +152,13 @@ public class Authenticator {
             boolean consentObtained
     ) throws Exception {
 
-        // Use default values if Optional parameters are empty
+
         String transactionId = txnId.orElse(UUID.randomUUID().toString());
         String otp = otpValue.orElse(null);
         List<BiometricModel> biometricList = biometrics.orElse(Collections.emptyList());
 
-        // Call the authenticate method with resolved parameters
+        System.out.println("Transaction ID: " + transactionId + ", OTP: " + otp + ", Biometrics: " + biometricList +
+                ", Consent Obtained: " + consentObtained + ", Individual ID: " + individualId + ", Individual ID Type: " + individualIdType);
         return authenticate("auth", individualId, individualIdType, demographicData, otp, biometricList, consentObtained, transactionId);
     }
 
@@ -314,6 +315,7 @@ public class Authenticator {
                 URLEncoder.encode(partnerId, StandardCharsets.UTF_8),
                 URLEncoder.encode(partnerApikey, StandardCharsets.UTF_8)
         );
+        System.out.println("pathParams" + pathParams);
 
         String fullRequestJson = authRequest.toJson();
         logger.debug("fullRequestJson={}", fullRequestJson);

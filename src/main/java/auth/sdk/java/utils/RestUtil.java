@@ -90,6 +90,10 @@ public class RestUtil {
         logger.fine("Final request route = " + serverUrl);
         logger.fine("Request Headers = " + requestHeaders);
 
+        System.out.println("Got <POST> Request for URL: " + this.authServerUrl);
+        System.out.println("Final request route = " + serverUrl);
+        System.out.println("Request Headers = " + requestHeaders);
+
         URL url = new URL(serverUrl);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");

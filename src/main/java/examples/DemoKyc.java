@@ -8,6 +8,7 @@ import auth.sdk.java.models.IdentityInfo;
 import auth.sdk.java.utils.ConfigLoader;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -56,6 +57,8 @@ public class DemoKyc {
 
             System.out.println("Response status: 200");
             System.out.println("Response body: " + response.toPrettyString());
+            Map<String, Object> decryptedResponse = authenticator.decryptResponse(objectMapper.convertValue(response, Map.class));
+            System.out.println("Decrypted Response: " + objectMapper.writeValueAsString(decryptedResponse));
             // Check for errors in the response
             if (response != null && response.has("errors")) {
                 JsonNode errors = response.get("errors");
